@@ -1,0 +1,32 @@
+server:
+  port: 8090
+spring:
+  sql:
+    init:
+      mode: always  # 强制每次启动执行SQL
+      data-source: mydb  # 多数据源时指定具体数据源
+      encoding: UTF-8
+  datasource:
+    name: jdbc/inz-ds
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/daiying?useSSL=false&characterEncoding=UTF-8
+    driverClassName: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: localhost
+    #    host: 10.2.112.137
+    username: guest
+    password: guest
+  redis:
+    database: 1
+    host: localhost
+jwt:
+  secret: "WX4aGq5TZ8jKp6nL7v2cYwBdEfRgHjUkQ1iM3oP5sN9yV0CtAxZrDlOuIeFbJhWX4aGq5TZ8jKp6nL7v2cYwBdEfRgHjUkQ1iM3oP5sN9yV0CtAx"
+  expiration: 600000
+  fix: Daiying
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.daiying_backend.pojo
+logging:
+  configuration:
+    map-underscore-to-camel-case: true
