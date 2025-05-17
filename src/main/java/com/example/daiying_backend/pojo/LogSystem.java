@@ -2,16 +2,14 @@ package com.example.daiying_backend.pojo;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class User implements Serializable {
+public class LogSystem {
     private Integer id;
     private String username;
-    private String password;
     private String phone;
-    private String email;
-    private String role;
+    private String roleName;
+    private String editDes;
     private Date createTime;
 }

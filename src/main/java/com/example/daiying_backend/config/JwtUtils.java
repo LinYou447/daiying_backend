@@ -47,7 +47,7 @@ public class JwtUtils {
 
 
     // 生成 Token
-    public String generateToken(User userDetails) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 //        claims.put("roles",userDetails.getRole());
         return Jwts.builder()
@@ -66,7 +66,12 @@ public class JwtUtils {
     }
 
     public boolean validateToken(String token) {
-        return (!"".equals(token));
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
     // 提取用户名

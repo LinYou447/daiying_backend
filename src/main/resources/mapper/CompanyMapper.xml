@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daiying_backend.dao.mapper.CompanyMapper">
+
+    <insert id="createCompany" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO company (name, address, phone, qualification, capital, legal_person, create_time)
+        VALUES (#{name}, #{address}, #{phone},
+                #{qualification}, #{capital}, #{legalPerson}, #{createTime})
+    </insert>
+
+    <update id="updateCompany">
+        UPDATE company
+        SET name          = #{name},
+            address       = #{address},
+            phone         = #{phone},
+            qualification = #{qualification},
+            capital       = #{capital},
+            legal_person  = #{legalPerson}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM company
+        WHERE id = #{id}
+    </delete>
+
+    <select id="getById" resultType="Company">
+        SELECT *
+        FROM company
+        WHERE id = #{id}
+    </select>
+
+    <select id="getByUserId" resultType="Company">
+        SELECT c.*, u.username, u.id as userId
+        FROM company AS c
+                 LEFT JOIN user_company as uc on uc.company_id = c.id
+                 LEFT JOIN user as u on u.id = uc.user_id
+        WHERE u.id = #{userId}
+    </select>
+
+    <select id="getByPhone" resultType="Company">
+        SELECT *
+        FROM company
+        WHERE phone = #{phone}
+    </select>
+
+    <select id="getAllCompany" resultType="Company">
+        SELECT c.*,u.username,u.id as userId FROM company AS c
+        LEFT JOIN user_company as uc on uc.company_id = c.id
+        LEFT JOIN user as u on u.id = uc.user_id
+        WHERE 1=1
+        <if test="name != null and name != '' ">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="phone != null and phone != '' ">
+            AND c.phone = #{phone}
+        </if>
+    </select>
+</mapper>

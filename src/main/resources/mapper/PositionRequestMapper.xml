@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daiying_backend.dao.mapper.PositionRequestMapper">
+
+    <insert id="createPositionRequest" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO position_request (biographical_id, position_id, company_id, user_id,
+                                      state, create_time)
+        VALUES (#{biographicalId}, #{positionId}, #{companyId}, #{userId},
+                #{state}, #{createTime})
+    </insert>
+
+    <update id="updatePositionRequest">
+        UPDATE position_request
+        SET state = #{state},
+            mes   = #{mes}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE
+        FROM position_request
+        WHERE id = #{id}
+    </delete>
+
+    <select id="getById" resultType="PositionRequest">
+        SELECT *
+        FROM position_request
+        WHERE id = #{id}
+    </select>
+
+    <select id="getByPositionId" resultType="PositionRequest">
+        SELECT *
+        FROM position_request
+        WHERE position_id = #{positionId}
+    </select>
+
+    <select id="getByUserId" resultType="PositionRequest">
+        SELECT c.name as companyName, p.name as positionName, pr.*
+        FROM position_request AS pr
+                 LEFT JOIN company AS c on pr.company_id = c.id
+                 LEFT JOIN position as p on pr.position_id = p.id
+        WHERE pr.user_id = #{userId}
+    </select>
+
+
+    <select id="getAllPositionRequest" resultType="PositionRequest">
+        SELECT b.id as bioId,b.name as bioName,b.phone as bioPhone,c.name AS cpmpanyName,pr.*,p.name as
+        positionName,p.position_code as positionCode FROM position_request AS pr
+        LEFT JOIN company AS c ON pr.company_id = c.id
+        LEFT JOIN biographical as b ON b.id = pr.biographical_id
+        LEFT JOIN position as p ON p.id = pr.position_id
+        where 1=1
+        <if test="companyId != null and companyId != '' ">
+            AND pr.company_id = #{companyId}
+        </if>
+        <if test="state != null and state != '' ">
+            AND pr.state = #{state}
+        </if>
+        <if test="positionName != null and positionName != '' ">
+            AND p.name LIKE CONCAT('%',#{positionName},'%')
+        </if>
+        <if test="phone != null and phone != '' ">
+            AND b.phone = #{phone}
+        </if>
+        <if test="positionCode != null and positionCode != '' ">
+            AND p.position_code = #{positionCode}
+        </if>
+    </select>
+</mapper>

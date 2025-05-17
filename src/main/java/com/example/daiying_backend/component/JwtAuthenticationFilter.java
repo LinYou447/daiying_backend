@@ -1,25 +1,20 @@
 package com.example.daiying_backend.component;
 
 import com.example.daiying_backend.config.JwtUtils;
-import com.example.daiying_backend.dao.mapper.UserMapper;
-import com.example.daiying_backend.pojo.User;
-import com.example.daiying_backend.service.api.UserService;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -46,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // 排除登录路径
             if (request.getServletPath().equals("/api/user/login")
-                || request.getServletPath().equals("/api/user/regedit")) {
+                    || request.getServletPath().equals("/api/user/regedit")) {
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -60,10 +55,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userDetails, null, userDetails.getAuthorities()
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }else{
+            } else {
                 throw new AuthenticationCredentialsNotFoundException("Invalid JWT token");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             authenticationEntryPoint.commence(request, response, new AuthenticationCredentialsNotFoundException("Authentication failed", e));
             return;
         }

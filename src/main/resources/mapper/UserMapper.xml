@@ -4,37 +4,58 @@
 <mapper namespace="com.example.daiying_backend.dao.mapper.UserMapper">
 
     <insert id="createUser" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO user (username, password, phone, email, role)
-        VALUES (#{username}, #{password}, #{phone},#{email}, #{role})
+        INSERT INTO user (username, password, phone, email, role, create_time)
+        VALUES (#{username}, #{password}, #{phone}, #{email}, #{role}, #{createTime})
     </insert>
 
     <update id="updateUser">
         UPDATE user
         SET username = #{username},
             password = #{password},
-            phone = #{phone},
-            email = #{email},
-            role = #{role}
+            phone    = #{phone},
+            email    = #{email},
+            role     = #{role}
         WHERE id = #{id}
     </update>
 
     <delete id="deleteUserById">
-        DELETE FROM user WHERE id = #{id}
+        DELETE
+        FROM user
+        WHERE id = #{id}
     </delete>
 
     <select id="getById" resultType="User">
-        SELECT * FROM user WHERE id = #{id}
+        SELECT *
+        FROM user
+        WHERE id = #{id}
     </select>
 
     <select id="getByName" resultType="User">
-        SELECT * FROM user WHERE username = #{username}
+        SELECT *
+        FROM user
+        WHERE username = #{username}
     </select>
 
     <select id="getUserByPhone" resultType="User">
-        SELECT * FROM user WHERE username = #{phone}
+        SELECT *
+        FROM user
+        WHERE username = #{phone}
     </select>
 
     <select id="getAllUser" resultType="User">
         SELECT * FROM user
+        WHERE 1 = 1
+        <if test="username != null and username != '' ">
+            AND username LIKE CONCAT('%',#{username},'%')
+        </if>
+        <if test="phone != null and phone != '' ">
+            AND phone = #{phone}
+        </if>
+    </select>
+
+    <select id="getAllUserByRole" resultType="User">
+        SELECT *
+        FROM user
+        WHERE role = #{role}
     </select>
 </mapper>

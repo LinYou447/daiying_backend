@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.daiying_backend.dao.mapper.RoleMapper">
+
+    <insert id="createRole" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO role (name, state,des,create_time)
+        VALUES (#{name}, #{state},#{des},#{createTime})
+    </insert>
+
+    <update id="updateRole">
+        UPDATE role
+        SET name = #{name},
+            state = #{state},
+            des = #{des}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM role WHERE id = #{id}
+    </delete>
+
+    <select id="getById" resultType="Role">
+        SELECT * FROM role WHERE id = #{id}
+    </select>
+
+    <select id="getAllRole" resultType="Role">
+        SELECT * FROM role
+        where 1=1
+        <if test="state != null and state != '' ">
+           AND state = #{state}
+        </if>
+        <if test="name != null and name != '' ">
+            AND name LIKE CONCAT('%',#{name},'%')
+        </if>
+    </select>
+</mapper>

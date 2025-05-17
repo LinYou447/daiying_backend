@@ -8,10 +8,18 @@ import java.util.List;
 
 public interface UserService {
     CommonResult createUser(User user);
+
     CommonResult login(String loginRequest);
+
     CommonResult getById(Integer id);
+
     CommonResult getByName(String username);
-    CommonResult getAllUser();
+
+    CommonResult getAllUser(String username, String phone);
+
+    CommonResult getAllUserByRole(String role);
+
     CommonResult updateUser(User user);
+
     CommonResult deleteUserById(Integer id);
 }
